@@ -60,7 +60,7 @@
 ### 方法二：手动安装
 ```bash
 cd ComfyUI/custom_nodes
-git clone https://github.com/yourusername/ComfyUI-ResolutionPresets.git
+git clone https://github.com/fan200617120-ui/ComfyUI_Sizepresets.git
 
 
 ComfyUI-ResolutionPresets/
@@ -78,6 +78,7 @@ ComfyUI-ResolutionPresets/
     └── resolution_presets.js
 
 ![ComfyUI工作流示例](https://github.com/tan20061720-ui/ComfyUI_Sizepresets/blob/main/2026-01-22_010856.png?raw=true)
+
 
 
 
