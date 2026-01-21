@@ -37,33 +37,6 @@
 - 🔧 **模块化设计**：清晰的代码结构，易于维护扩展
 - ✅ **完全兼容**：兼容所有ComfyUI工作流
   
-### 目录结构
-ComfyUI-ResolutionPresets/
-├── __init__.py
-├── nodes.py
-├── presets.py
-├── utils.py
-├── README.md
-├── LICENSE
-├── requirements.txt
-├── workflow_examples/
-│   ├── basic_workflow.json
-│   └── advanced_workflow.json
-└── web/
-    └── resolution_presets.js
-
-### 基础工作流 
-{
-  "nodes": [
-    {
-      "type": "ResolutionPresetSetter",
-      "inputs": {
-        "FLUX": "1920×1080 (16:9) 2K"
-      }
-    }
-  ]
-}
-
 ## 📦 安装方法
 
 ### 方法一：通过ComfyUI Manager安装（推荐）
@@ -93,12 +66,39 @@ git clone https://github.com/fan200617120-ui/ComfyUI_Sizepresets.git
 • 4096×2160 (17:9) 4K DCI
 • 5120×2880 (16:9) 5K
 • 6144×3456 (16:9) 6K
+
+![ComfyUI工作流示例](https://github.com/fan200617120-ui/ComfyUI_Sizepresets/blob/main/2026-01-22_010856.png?raw=true)
+
+### 目录结构
+ComfyUI-ResolutionPresets/
+├── __init__.py
+├── nodes.py
+├── presets.py
+├── utils.py
+├── README.md
+├── LICENSE
+├── requirements.txt
+├── workflow_examples/
+│   ├── basic_workflow.json
+│   └── advanced_workflow.json
+└── web/
+    └── resolution_presets.js
+
+### 基础工作流 
+{
+  "nodes": [
+    {
+      "type": "ResolutionPresetSetter",
+      "inputs": {
+        "FLUX": "1920×1080 (16:9) 2K"
+      }
+    }
+  ]
+}
+
 🤝 贡献指南欢迎提交Issue和PR！
 📄 许可证MIT License￼如果这个插件对你有帮助，请给个⭐ Star！
 
-
-
-![ComfyUI工作流示例](https://github.com/fan200617120-ui/ComfyUI_Sizepresets/blob/main/2026-01-22_010856.png?raw=true)
 
 
 
