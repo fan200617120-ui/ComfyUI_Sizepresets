@@ -1,0 +1,8 @@
+# ComfyUI Resolution Presets Plugin
+# 依赖说明：本插件仅依赖ComfyUI标准库
+# 无需额外安装依赖
+
+# 如果未来需要额外依赖，可以在这里添加
+# torch>=2.0.0
+# numpy>=1.24.0
+# Pillow>=10.0.0

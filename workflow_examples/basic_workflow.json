@@ -1,0 +1,85 @@
+{
+  "last_node_id": 8,
+  "last_link_id": 7,
+  "nodes": [
+    {
+      "id": 1,
+      "type": "ResolutionPresetSetter",
+      "pos": [100, 100],
+      "size": [300, 300],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [
+        {"name": "SD1.5", "type": "COMBO", "widget": {"name": "SD1.5"}, "link": null},
+        {"name": "SDXL", "type": "COMBO", "widget": {"name": "SDXL"}, "link": null},
+        {"name": "FLUX", "type": "COMBO", "widget": {"name": "FLUX"}, "link": null},
+        {"name": "WAN", "type": "COMBO", "widget": {"name": "WAN"}, "link": null},
+        {"name": "QWEN", "type": "COMBO", "widget": {"name": "QWEN"}, "link": null},
+        {"name": "自定义", "type": "COMBO", "widget": {"name": "自定义"}, "link": null},
+        {"name": "启用自定义分辨率", "type": "BOOLEAN", "widget": {"name": "启用自定义分辨率"}, "link": null},
+        {"name": "宽度", "type": "INT", "widget": {"name": "宽度"}, "link": null},
+        {"name": "高度", "type": "INT", "widget": {"name": "高度"}, "link": null}
+      ],
+      "outputs": [
+        {"name": "宽度", "type": "INT", "links": [2]},
+        {"name": "高度", "type": "INT", "links": [3]}
+      ],
+      "properties": {},
+      "widgets_values": ["关", "关", "1920×1080 (16:9) 2K", "关", "关", "关", false, 1024, 1024]
+    },
+    {
+      "id": 2,
+      "type": "ResolutionCalculator",
+      "pos": [500, 100],
+      "size": [300, 400],
+      "flags": {},
+      "order": 1,
+      "mode": 0,
+      "inputs": [
+        {"name": "原始宽度", "type": "INT", "widget": {"name": "原始宽度"}, "link": 2},
+        {"name": "原始高度", "type": "INT", "widget": {"name": "原始高度"}, "link": 3},
+        {"name": "缩放模式", "type": "COMBO", "widget": {"name": "缩放模式"}, "link": null},
+        {"name": "缩放比例", "type": "FLOAT", "widget": {"name": "缩放比例"}, "link": null},
+        {"name": "目标长宽比", "type": "COMBO", "widget": {"name": "目标长宽比"}, "link": null},
+        {"name": "最大边长限制", "type": "INT", "widget": {"name": "最大边长限制"}, "link": null},
+        {"name": "确保8的倍数", "type": "BOOLEAN", "widget": {"name": "确保8的倍数"}, "link": null}
+      ],
+      "outputs": [
+        {"name": "宽度", "type": "INT", "links": []},
+        {"name": "高度", "type": "INT", "links": []},
+        {"name": "分辨率信息", "type": "STRING", "links": []}
+      ],
+      "properties": {},
+      "widgets_values": [1920, 1080, "按比例", 1.0, "保持原比例", 4096, true]
+    },
+    {
+      "id": 3,
+      "type": "ResolutionAnalyzer",
+      "pos": [900, 100],
+      "size": [300, 200],
+      "flags": {},
+      "order": 2,
+      "mode": 0,
+      "inputs": [
+        {"name": "宽度", "type": "INT", "widget": {"name": "宽度"}, "link": null},
+        {"name": "高度", "type": "INT", "widget": {"name": "高度"}, "link": null},
+        {"name": "详细模式", "type": "BOOLEAN", "widget": {"name": "详细模式"}, "link": null}
+      ],
+      "outputs": [
+        {"name": "基本信息", "type": "STRING", "links": []},
+        {"name": "详细分析", "type": "STRING", "links": []}
+      ],
+      "properties": {},
+      "widgets_values": [1920, 1080, true]
+    }
+  ],
+  "links": [
+    [2, 1, 0, 2, 0],
+    [3, 1, 1, 2, 1]
+  ],
+  "groups": [],
+  "config": {},
+  "version": 0.4,
+  "extra": {}
+}
