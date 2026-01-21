@@ -58,24 +58,10 @@
 4. 点击安装，重启ComfyUI
 
 ### 方法二：手动安装
-```bash
+
 cd ComfyUI/custom_nodes
 git clone https://github.com/fan200617120-ui/ComfyUI_Sizepresets.git
 
-
-ComfyUI-ResolutionPresets/
-├── __init__.py
-├── nodes.py
-├── presets.py
-├── utils.py
-├── README.md
-├── LICENSE
-├── requirements.txt
-├── workflow_examples/
-│   ├── basic_workflow.json
-│   └── advanced_workflow.json
-└── web/
-    └── resolution_presets.js
 ### 基础使用
 1. 在节点菜单中找到 ResolutionPresets 分类
 2. 添加 分辨率预设器 节点
@@ -94,7 +80,24 @@ ComfyUI-ResolutionPresets/
 • 6144×3456 (16:9) 6K
 🤝 贡献指南欢迎提交Issue和PR！
 📄 许可证MIT License￼如果这个插件对你有帮助，请给个⭐ Star！
+
+### 目录结构
+ComfyUI-ResolutionPresets/
+├── __init__.py
+├── nodes.py
+├── presets.py
+├── utils.py
+├── README.md
+├── LICENSE
+├── requirements.txt
+├── workflow_examples/
+│   ├── basic_workflow.json
+│   └── advanced_workflow.json
+└── web/
+    └── resolution_presets.js
+
 ![ComfyUI工作流示例](https://github.com/tan20061720-ui/ComfyUI_Sizepresets/blob/main/2026-01-22_010856.png?raw=true)
+
 
 
 
