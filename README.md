@@ -36,6 +36,21 @@
 - 🎨 **专业命名**：统一的中文专业术语，易于理解
 - 🔧 **模块化设计**：清晰的代码结构，易于维护扩展
 - ✅ **完全兼容**：兼容所有ComfyUI工作流
+  
+### 目录结构
+ComfyUI-ResolutionPresets/
+├── __init__.py
+├── nodes.py
+├── presets.py
+├── utils.py
+├── README.md
+├── LICENSE
+├── requirements.txt
+├── workflow_examples/
+│   ├── basic_workflow.json
+│   └── advanced_workflow.json
+└── web/
+    └── resolution_presets.js
 
 ### 基础工作流 
 {
@@ -81,22 +96,10 @@ git clone https://github.com/fan200617120-ui/ComfyUI_Sizepresets.git
 🤝 贡献指南欢迎提交Issue和PR！
 📄 许可证MIT License￼如果这个插件对你有帮助，请给个⭐ Star！
 
-### 目录结构
-ComfyUI-ResolutionPresets/
-├── __init__.py
-├── nodes.py
-├── presets.py
-├── utils.py
-├── README.md
-├── LICENSE
-├── requirements.txt
-├── workflow_examples/
-│   ├── basic_workflow.json
-│   └── advanced_workflow.json
-└── web/
-    └── resolution_presets.js
+
 
 ![ComfyUI工作流示例](https://github.com/tan20061720-ui/ComfyUI_Sizepresets/blob/main/2026-01-22_010856.png?raw=true)
+
 
 
 
