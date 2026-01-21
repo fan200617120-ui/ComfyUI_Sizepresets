@@ -98,7 +98,9 @@ git clone https://github.com/fan200617120-ui/ComfyUI_Sizepresets.git
 
 
 
-![ComfyUI工作流示例](https://github.com/tan20061720-ui/ComfyUI_Sizepresets/blob/main/2026-01-22_010856.png?raw=true)
+![ComfyUI工作流示例](https://github.com/fan200617120-ui/ComfyUI_Sizepresets/blob/main/2026-01-22_010856.png?raw=true)
+
+
 
 
 
