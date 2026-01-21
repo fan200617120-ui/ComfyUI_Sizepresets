@@ -76,8 +76,28 @@ ComfyUI-ResolutionPresets/
 │   └── advanced_workflow.json
 └── web/
     └── resolution_presets.js
-
+### 基础使用
+1. 在节点菜单中找到 ResolutionPresets 分类
+2. 添加 分辨率预设器 节点
+3. 选择模型和预设尺寸
+4. 连接输出到你的工作流
+📐 节点详解
+1. 分辨率预设 - 图像处理图像和遮罩的分辨率调整，支持多种缩放算法和裁剪方式。
+2. 分辨率预设 - 潜在空间生成指定分辨率的潜在空间张量，专为AI图像生成设计。
+3. 分辨率预设器获取分辨率值，用于控制其他节点的尺寸参数。
+🎨 FLUX 大尺寸预设示例
+• 1920×1080 (16:9) 2K
+• 2560×1440 (16:9) 2.5K
+• 3840×2160 (16:9) 4K UHD
+• 4096×2160 (17:9) 4K DCI
+• 5120×2880 (16:9) 5K
+• 6144×3456 (16:9) 6K
+🤝 贡献指南欢迎提交Issue和PR！
+📄 许可证MIT License￼如果这个插件对你有帮助，请给个⭐ Star！
 ![ComfyUI工作流示例](https://github.com/tan20061720-ui/ComfyUI_Sizepresets/blob/main/2026-01-22_010856.png?raw=true)
+
+
+
 
 
 
