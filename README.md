@@ -54,7 +54,7 @@
 ### 方法一：通过ComfyUI Manager安装（推荐）
 1. 打开ComfyUI，确保已安装ComfyUI-Manager
 2. 点击"Manager" → "Install Custom Nodes"
-3. 搜索"ResolutionPresets"
+3. 搜索"ComfyUI_Sizepresets"
 4. 点击安装，重启ComfyUI
 
 ### 方法二：手动安装
@@ -97,6 +97,7 @@ ComfyUI-ResolutionPresets/
     └── resolution_presets.js
 
 ![ComfyUI工作流示例](https://github.com/tan20061720-ui/ComfyUI_Sizepresets/blob/main/2026-01-22_010856.png?raw=true)
+
 
 
 
