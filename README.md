@@ -15,12 +15,12 @@
 - **专业工具**：长宽比计算器、批量处理等实用工具
 ###📐 **节点列表**
  节点	         功能	    说明
-**分辨率预设** - 图像	处理图像和遮罩	支持多种裁剪和缩放算法
-**分辨率预设** - 潜在空间	生成潜在空间	用于AI图像生成
-**分辨率预设器**	获取分辨率值	控制其他节点尺寸
-**分辨率计算器**	智能计算尺寸	支持多种缩放模式
-**分辨率分析器**	分析分辨率信息	提供使用建议
-**长宽比计算器**	计算长宽比	识别常见比例
+**分辨率预设** - 图像	处理图像和遮罩	支持多种裁剪和缩放算法  
+**分辨率预设** - 潜在空间	生成潜在空间	用于AI图像生成  
+**分辨率预设器**	获取分辨率值	控制其他节点尺寸  
+**分辨率计算器**	智能计算尺寸	支持多种缩放模式  
+**分辨率分析器**	分析分辨率信息	提供使用建议  
+**长宽比计算器**	计算长宽比	识别常见比例  
 
 ### 📊 **支持的模型预设**
 | 模型 | 预设数量 | 特点 |
@@ -45,46 +45,46 @@
 3. 搜索"ComfyUI_Sizepresets"
 4. 点击安装，重启ComfyUI
 
-### 方法二：手动安装
+### 方法二：手动安装  
 
-cd ComfyUI/custom_nodes
-git clone https://github.com/fan200617120-ui/ComfyUI_Sizepresets.git
+cd ComfyUI/custom_nodes  
+git clone https://github.com/fan200617120-ui/ComfyUI_Sizepresets.git  
 
-### 基础使用
-1. 在节点菜单中找到 ResolutionPresets 分类
-2. 添加 分辨率预设器 节点
-3. 选择模型和预设尺寸
-4. 连接输出到你的工作流
-📐 节点详解
-1. 分辨率预设 - 图像处理图像和遮罩的分辨率调整，支持多种缩放算法和裁剪方式。
-2. 分辨率预设 - 潜在空间生成指定分辨率的潜在空间张量，专为AI图像生成设计。
-3. 分辨率预设器获取分辨率值，用于控制其他节点的尺寸参数。
-🎨 FLUX 大尺寸预设示例：
-• 1920×1080 (16:9) 2K
-• 2560×1440 (16:9) 2.5K
-• 3840×2160 (16:9) 4K UHD
-• 4096×2160 (17:9) 4K DCI
-• 5120×2880 (16:9) 5K
-• 6144×3456 (16:9) 6K
+### 基础使用  
+1. 在节点菜单中找到 ResolutionPresets 分类  
+2. 添加 分辨率预设器 节点  
+3. 选择模型和预设尺寸  
+4. 连接输出到你的工作流  
+📐 节点详解  
+1. 分辨率预设 - 图像处理图像和遮罩的分辨率调整，支持多种缩放算法和裁剪方式。  
+2. 分辨率预设 - 潜在空间生成指定分辨率的潜在空间张量，专为AI图像生成设计。  
+3. 分辨率预设器获取分辨率值，用于控制其他节点的尺寸参数。  
+🎨 FLUX 大尺寸预设示例：  
+• 1920×1080 (16:9) 2K  
+• 2560×1440 (16:9) 2.5K  
+• 3840×2160 (16:9) 4K UHD  
+• 4096×2160 (17:9) 4K DCI  
+• 5120×2880 (16:9) 5K  
+• 6144×3456 (16:9) 6K  
 
 ![ComfyUI工作流示例](https://github.com/fan200617120-ui/ComfyUI_Sizepresets/blob/main/2026-01-22_010856.png?raw=true)
 
-### 目录结构
-ComfyUI-ResolutionPresets/
-├── __init__.py
-├── nodes.py
-├── presets.py
-├── utils.py
-├── README.md
-├── LICENSE
-├── requirements.txt
-├── workflow_examples/
-│   ├── basic_workflow.json
-│   └── advanced_workflow.json
-└── web/
-    └── resolution_presets.js
+### 目录结构  
+ComfyUI-ResolutionPresets/  
+├── __init__.py  
+├── nodes.py  
+├── presets.py  
+├── utils.py  
+├── README.md  
+├── LICENSE  
+├── requirements.txt  
+├── workflow_examples/  
+│   ├── basic_workflow.json  
+│   └── advanced_workflow.json  
+└── web/  
+    └── resolution_presets.js  
 
-### 基础工作流 
+### 基础工作流   
 {
   "nodes": [
     {
@@ -94,10 +94,11 @@ ComfyUI-ResolutionPresets/
       }
     }
   ]
-}
+}  
 
 🤝 贡献指南欢迎提交Issue和PR！
 📄 许可证MIT License￼如果这个插件对你有帮助，请给个⭐ Star！
+
 
 
 
