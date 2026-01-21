@@ -58,3 +58,6 @@ ComfyUI-ResolutionPresets/
 └── web/
     └── resolution_presets.js
 
+https://github.com/fan200617120-ui/ComfyUI_Sizepresets/blob/main/2026-01-22_010856.png?raw=true
+
+
