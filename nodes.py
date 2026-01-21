@@ -1,142 +1,162 @@
 """
-分辨率预设与工具节点 - 专业版
+ComfyUI Resolution Presets 节点定义
 文件夹名：ComfyUI_Sizepresets
 节点显示名：专业分辨率节点
 """
+
 import torch
+import numpy as np
+from PIL import Image, ImageOps
 from typing import Dict, Any, Tuple
-from .presets import get_size_from_preset, PRESETS, CROP_METHODS, RESIZE_ALGOS
-from .utils import ImageUtils
 
-class BaseResolutionNode:
-    """基础分辨率节点"""
-    
-    @classmethod
-    def get_preset_inputs(cls) -> Dict[str, Any]:
-        return {
-            k: (["关"] + [name for name, _ in v], {"default": "关"})
-            for k, v in PRESETS.items()
-        }
-    
-    @staticmethod
-    def validate_resolution(width: int, height: int, min_size: int = 64, max_size: int = 8192) -> Tuple[int, int]:
-        width = max(min_size, min(width, max_size))
-        height = max(min_size, min(height, max_size))
-        return width, height
+# 导入预设
+from .presets import PRESETS, CROP_METHODS, RESIZE_ALGOS, get_size_from_preset
 
-# ========== 核心节点：保持专业显示名 ==========
-
-class ResolutionPresetImage(BaseResolutionNode):
+class ResolutionPresetImage:
     """分辨率预设 - 图像处理"""
     
     @classmethod
-    def INPUT_TYPES(cls) -> Dict[str, Any]:
+    def INPUT_TYPES(cls):
+        preset_dict = {k: ["关"] + [t[0] for t in PRESETS[k]] for k in PRESETS}
         return {
             "required": {
-                **cls.get_preset_inputs(),
+                **{k: (v, {"default": "关"}) for k, v in preset_dict.items()},
                 "裁剪方式": (CROP_METHODS, {"default": "中心裁剪"}),
                 "缩放算法": (RESIZE_ALGOS, {"default": "lanczos"}),
                 "启用边长缩放": ("BOOLEAN", {"default": False}),
-                "缩放基准": (["最长边", "最短边"], {"default": "最长边"}),
+                "缩放至边": (["最长边", "最短边"], {"default": "最长边"}),
                 "缩放长度": ("INT", {"default": 1024, "min": 64, "max": 8192, "step": 8}),
             },
             "optional": {
-                "图像输入": ("IMAGE",),
-                "遮罩输入": ("MASK",),
+                "图像": ("IMAGE",),
+                "遮罩": ("MASK",),
             }
         }
     
     RETURN_TYPES = ("IMAGE", "MASK", "INT", "INT")
-    RETURN_NAMES = ("图像输出", "遮罩输出", "宽度", "高度")
-    FUNCTION = "process_image"
-    CATEGORY = "ResolutionPresets"  # 专业分类名
+    RETURN_NAMES = ("图像", "遮罩", "宽度", "高度")
+    FUNCTION = "run"
+    CATEGORY = "ResolutionPresets"  # 关键：专业分类名
     
-    def process_image(self, 图像输入=None, 遮罩输入=None, **kwargs):
+    def run(self, 图像=None, 遮罩=None, **kwargs):
         use_edge = kwargs["启用边长缩放"]
-        edge_mode = kwargs["缩放基准"]
+        edge_mode = kwargs["缩放至边"]
         target_len = kwargs["缩放长度"]
         crop = kwargs["裁剪方式"]
         algo = kwargs["缩放算法"]
         
+        # 边长缩放模式
         if use_edge:
-            if 图像输入 is not None:
-                pil_img = ImageUtils.tensor_to_pil(图像输入)
-                pil_img = ImageUtils.resize_by_edge(pil_img, edge_mode, target_len)
-                图像输出 = ImageUtils.pil_to_tensor(pil_img)
+            if 图像 is not None:
+                b, h0, w0, c = 图像.shape
+                arr = (图像.squeeze(0).cpu().numpy() * 255).astype(np.uint8)
+                pil_img = Image.fromarray(arr)
+                pil_img = self._resize_by_edge(pil_img, edge_mode, target_len)
+                arr = np.array(pil_img).astype(np.float32) / 255.0
+                图像 = torch.from_numpy(arr).unsqueeze(0)
                 out_w, out_h = pil_img.size
             else:
-                图像输出 = torch.zeros((1, 3, 512, 512), dtype=torch.float32)
+                图像 = torch.zeros((1, 512, 512, 3), dtype=torch.float32)
                 out_w, out_h = 512, 512
             
-            if 遮罩输入 is not None:
-                pil_msk = ImageUtils.tensor_to_pil(遮罩输入, is_mask=True)
-                pil_msk = ImageUtils.resize_by_edge(pil_msk, edge_mode, target_len)
-                遮罩输出 = ImageUtils.pil_to_tensor(pil_msk, is_mask=True)
+            if 遮罩 is not None:
+                b, h0, w0 = 遮罩.shape
+                arr = (遮罩.squeeze(0).cpu().numpy() * 255).astype(np.uint8)
+                pil_msk = Image.fromarray(arr, mode="L")
+                pil_msk = self._resize_by_edge(pil_msk, edge_mode, target_len)
+                arr = np.array(pil_msk).astype(np.float32) / 255.0
+                遮罩 = torch.from_numpy(arr).unsqueeze(0)
             else:
-                遮罩输出 = torch.zeros((1, 1, out_h, out_w), dtype=torch.float32)
+                遮罩 = torch.zeros((1, out_h, out_w), dtype=torch.float32)
             
-            return (图像输出, 遮罩输出, out_w, out_h)
+            return (图像, 遮罩, out_w, out_h)
         
+        # 预设尺寸模式
         choices = {k: kwargs[k] for k in PRESETS}
         w, h = get_size_from_preset(choices)
         
-        if 图像输入 is not None:
-            pil_img = ImageUtils.tensor_to_pil(图像输入)
-            pil_img = ImageUtils.resize_with_crop(pil_img, w, h, crop, algo)
-            图像输出 = ImageUtils.pil_to_tensor(pil_img)
+        if 图像 is not None:
+            b, h0, w0, c = 图像.shape
+            arr = (图像.squeeze(0).cpu().numpy() * 255).astype(np.uint8)
+            pil_img = Image.fromarray(arr)
+            pil_img = self._resize_crop(pil_img, w, h, crop, algo)
+            arr = np.array(pil_img).astype(np.float32) / 255.0
+            图像 = torch.from_numpy(arr).unsqueeze(0)
         else:
-            图像输出 = torch.zeros((1, 3, h, w), dtype=torch.float32)
+            图像 = torch.zeros((1, h, w, 3), dtype=torch.float32)
         
-        if 遮罩输入 is not None:
-            pil_msk = ImageUtils.tensor_to_pil(遮罩输入, is_mask=True)
-            pil_msk = ImageUtils.resize_with_crop(pil_msk, w, h, crop, algo)
-            遮罩输出 = ImageUtils.pil_to_tensor(pil_msk, is_mask=True)
+        if 遮罩 is not None:
+            b, h0, w0 = 遮罩.shape
+            arr = (遮罩.squeeze(0).cpu().numpy() * 255).astype(np.uint8)
+            pil_msk = Image.fromarray(arr, mode="L")
+            pil_msk = self._resize_crop(pil_msk, w, h, crop, algo)
+            arr = np.array(pil_msk).astype(np.float32) / 255.0
+            遮罩 = torch.from_numpy(arr).unsqueeze(0)
         else:
-            遮罩输出 = torch.zeros((1, 1, h, w), dtype=torch.float32)
+            遮罩 = torch.zeros((1, h, w), dtype=torch.float32)
         
-        return (图像输出, 遮罩输出, w, h)
+        return (图像, 遮罩, w, h)
+    
+    def _resize_crop(self, image: Image.Image, tgt_w, tgt_h, crop_method, algo) -> Image.Image:
+        if crop_method == "中心裁剪":
+            image = ImageOps.fit(image, (tgt_w, tgt_h), method=Image.Resampling[algo.upper()])
+        else:
+            image = image.resize((tgt_w, tgt_h), resample=Image.Resampling[algo.upper()])
+        return image
+    
+    def _resize_by_edge(self, pil_img: Image.Image, edge_mode: str, target_len: int) -> Image.Image:
+        w, h = pil_img.size
+        if edge_mode == "最长边":
+            if w >= h:
+                new_w, new_h = target_len, int(h * target_len / w)
+            else:
+                new_w, new_h = int(w * target_len / h), target_len
+        else:  # 最短边
+            if w <= h:
+                new_w, new_h = target_len, int(h * target_len / w)
+            else:
+                new_w, new_h = int(w * target_len / h), target_len
+        return pil_img.resize((new_w, new_h), Image.Resampling.LANCZOS)
 
-class ResolutionPresetLatent(BaseResolutionNode):
+class ResolutionPresetLatent:
     """分辨率预设 - 潜在空间"""
     
     @classmethod
-    def INPUT_TYPES(cls) -> Dict[str, Any]:
+    def INPUT_TYPES(cls):
+        preset_dict = {k: ["关"] + [t[0] for t in PRESETS[k]] for k in PRESETS}
         return {
             "required": {
-                **cls.get_preset_inputs(),
-                "启用自定义分辨率": ("BOOLEAN", {"default": False}),
+                **{k: (v, {"default": "关"}) for k, v in preset_dict.items()},
+                "启用自定义尺寸": ("BOOLEAN", {"default": False}),
                 "宽度": ("INT", {"default": 1024, "min": 64, "max": 8192, "step": 8}),
                 "高度": ("INT", {"default": 1024, "min": 64, "max": 8192, "step": 8}),
             }
         }
     
     RETURN_TYPES = ("LATENT",)
-    RETURN_NAMES = ("潜在空间",)
-    FUNCTION = "create_latent"
-    CATEGORY = "ResolutionPresets"
+    FUNCTION = "run"
+    CATEGORY = "ResolutionPresets"  # 关键：专业分类名
     
-    def create_latent(self, **kwargs):
-        use_custom = kwargs["启用自定义分辨率"]
-        
+    def run(self, **kwargs):
+        use_custom = kwargs["启用自定义尺寸"]
         if use_custom:
             w, h = kwargs["宽度"], kwargs["高度"]
         else:
             choices = {k: kwargs[k] for k in PRESETS}
             w, h = get_size_from_preset(choices)
-        
-        w, h = self.validate_resolution(w, h)
         latent = torch.zeros([1, 4, h // 8, w // 8])
         return ({"samples": latent},)
 
-class ResolutionPresetSetter(BaseResolutionNode):
+class ResolutionPresetSetter:
     """分辨率预设器"""
     
     @classmethod
-    def INPUT_TYPES(cls) -> Dict[str, Any]:
+    def INPUT_TYPES(cls):
+        preset_dict = {k: ["关"] + [t[0] for t in PRESETS[k]] for k in PRESETS}
         return {
             "required": {
-                **cls.get_preset_inputs(),
-                "启用自定义分辨率": ("BOOLEAN", {"default": False}),
+                **{k: (v, {"default": "关"}) for k, v in preset_dict.items()},
+                "启用自定义尺寸": ("BOOLEAN", {"default": False}),
                 "宽度": ("INT", {"default": 1024, "min": 64, "max": 8192, "step": 8}),
                 "高度": ("INT", {"default": 1024, "min": 64, "max": 8192, "step": 8}),
             }
@@ -144,131 +164,26 @@ class ResolutionPresetSetter(BaseResolutionNode):
     
     RETURN_TYPES = ("INT", "INT")
     RETURN_NAMES = ("宽度", "高度")
-    FUNCTION = "get_resolution"
-    CATEGORY = "ResolutionPresets"
+    FUNCTION = "run"
+    CATEGORY = "ResolutionPresets"  # 关键：专业分类名
     
-    def get_resolution(self, **kwargs):
-        use_custom = kwargs["启用自定义分辨率"]
-        
+    def run(self, **kwargs):
+        use_custom = kwargs["启用自定义尺寸"]
         if use_custom:
-            w, h = kwargs["宽度"], kwargs["高度"]
-        else:
-            choices = {k: kwargs[k] for k in PRESETS}
-            w, h = get_size_from_preset(choices)
-        
-        return self.validate_resolution(w, h)
+            return (kwargs["宽度"], kwargs["高度"])
+        choices = {k: kwargs[k] for k in PRESETS}
+        w, h = get_size_from_preset(choices)
+        return (w, h)
 
-# ========== 工具节点 ==========
-
-class ResolutionCalculator(BaseResolutionNode):
-    """分辨率计算器"""
-    
-    @classmethod
-    def INPUT_TYPES(cls) -> Dict[str, Any]:
-        return {
-            "required": {
-                "原始宽度": ("INT", {"default": 1024, "min": 64, "max": 8192, "step": 8}),
-                "原始高度": ("INT", {"default": 1024, "min": 64, "max": 8192, "step": 8}),
-                "缩放模式": (["按比例", "按长宽比", "固定分辨率"], {"default": "按比例"}),
-                "缩放比例": ("FLOAT", {"default": 1.0, "min": 0.1, "max": 4.0, "step": 0.1}),
-                "目标长宽比": (["保持原比例", "1:1", "4:3", "3:2", "16:9", "3:4", "2:3", "9:16", "21:9"], {"default": "保持原比例"}),
-                "最大边长限制": ("INT", {"default": 4096, "min": 512, "max": 8192, "step": 8}),
-                "确保8的倍数": ("BOOLEAN", {"default": True}),
-            }
-        }
-    
-    RETURN_TYPES = ("INT", "INT", "STRING")
-    RETURN_NAMES = ("宽度", "高度", "分辨率信息")
-    FUNCTION = "calculate_resolution"
-    CATEGORY = "ResolutionPresets"
-    
-    def calculate_resolution(self, **kwargs):
-        width = kwargs["原始宽度"]
-        height = kwargs["原始高度"]
-        mode = kwargs["缩放模式"]
-        scale = kwargs["缩放比例"]
-        aspect = kwargs["目标长宽比"]
-        max_side = kwargs["最大边长限制"]
-        ensure_multiple = kwargs["确保8的倍数"]
-        
-        if mode == "固定分辨率":
-            new_width, new_height = width, height
-        elif mode == "按长宽比" and aspect != "保持原比例":
-            if ":" in aspect:
-                w_ratio, h_ratio = map(int, aspect.split(":"))
-                new_width, new_height = ImageUtils.calculate_optimal_size(
-                    width, height,
-                    target_aspect_ratio=(w_ratio, h_ratio),
-                    max_side=max_side,
-                    multiple_of=8 if ensure_multiple else 1
-                )
-            else:
-                new_width, new_height = width, height
-        else:
-            new_width = int(width * scale)
-            new_height = int(height * scale)
-            
-            if max(new_width, new_height) > max_side:
-                scale_factor = max_side / max(new_width, new_height)
-                new_width = int(new_width * scale_factor)
-                new_height = int(new_height * scale_factor)
-        
-        if ensure_multiple:
-            new_width = new_width - (new_width % 8)
-            new_height = new_height - (new_height % 8)
-        
-        info = ImageUtils.get_resolution_info(new_width, new_height)
-        info_str = (
-            f"📐 分辨率: {new_width} × {new_height}\n"
-            f"🔳 长宽比: {info['aspect_name']}\n"
-            f"📊 像素: {info['megapixels']} MP ({info['resolution_level']})\n"
-            f"📱 方向: {'横版 🌄' if info['is_landscape'] else '竖版 📱' if info['is_portrait'] else '正方形 ⬜'}"
-        )
-        
-        return (new_width, new_height, info_str)
-
-class ResolutionAnalyzer(BaseResolutionNode):
-    """分辨率分析器"""
-    
-    @classmethod
-    def INPUT_TYPES(cls) -> Dict[str, Any]:
-        return {
-            "required": {
-                "宽度": ("INT", {"default": 1024, "min": 64, "max": 8192, "step": 8}),
-                "高度": ("INT", {"default": 1024, "min": 64, "max": 8192, "step": 8}),
-            }
-        }
-    
-    RETURN_TYPES = ("STRING",)
-    RETURN_NAMES = ("分辨率信息",)
-    FUNCTION = "analyze_resolution"
-    CATEGORY = "ResolutionPresets"
-    
-    def analyze_resolution(self, 宽度, 高度):
-        info = ImageUtils.get_resolution_info(宽度, 高度)
-        
-        info_str = (
-            f"分辨率: {info['width']}×{info['height']} ({info['aspect_name']})\n"
-            f"像素: {info['megapixels']}MP • 等级: {info['resolution_level']}\n"
-            f"方向: {'横版 🌄' if info['is_landscape'] else '竖版 📱' if info['is_portrait'] else '正方形 ⬜'}"
-        )
-        
-        return (info_str,)
-
-# ========== 节点注册 ==========
-
+# 节点注册 - 使用专业显示名
 NODE_CLASS_MAPPINGS = {
     "ResolutionPresetImage": ResolutionPresetImage,
     "ResolutionPresetLatent": ResolutionPresetLatent,
     "ResolutionPresetSetter": ResolutionPresetSetter,
-    "ResolutionCalculator": ResolutionCalculator,
-    "ResolutionAnalyzer": ResolutionAnalyzer,
 }
 
 NODE_DISPLAY_NAME_MAPPINGS = {
     "ResolutionPresetImage": "分辨率预设 - 图像",
     "ResolutionPresetLatent": "分辨率预设 - 潜在空间",
     "ResolutionPresetSetter": "分辨率预设器",
-    "ResolutionCalculator": "分辨率计算器",
-    "ResolutionAnalyzer": "分辨率分析器",
 }
