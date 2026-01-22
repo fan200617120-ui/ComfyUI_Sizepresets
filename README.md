@@ -111,7 +111,7 @@
 ### 方法一：通过ComfyUI Manager安装（推荐）
 1. 打开ComfyUI，确保已安装ComfyUI-Manager
 2. 点击"Manager" → "Install Custom Nodes"
-3. 搜索"ComfyUI_Sizepresets"
+3. 搜索"ComfyUI-ResolutionPresets"
 4. 点击安装，重启ComfyUI
 ### 注：如果那边能过审，则可以用方法一。
 
@@ -257,6 +257,7 @@ ComfyUI-ResolutionPresets/
 由于个人精力有限，本项目将以社区驱动的方式持续发展，欢迎大家提交 PR 和 Issue，我会尽量抽空处理，但无法保证实时响应。感谢理解与支持！
 
 **Enjoy Creating! 🎨**
+
 
 
 
