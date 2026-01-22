@@ -43,7 +43,7 @@
 
 ---
 
-![插件节点截图](https://github.com/fan200617120-ui/ComfyUI_Sizepresets/blob/main/2026-01-22_010856.png?raw=true)
+![插件节点截图](https://github.com/fan200617120-ui/ComfyUI-ResolutionPresets/blob/main/2026-01-22_010856.png?raw=true)
 
 ## 🆕 新增节点详解
 
@@ -67,9 +67,9 @@
 输入值 = 1080
 输出 = 宽度:1080, 高度:1920  
 
-![极简比例计算器示例 1](https://github.com/fan200617120-ui/ComfyUI_Sizepresets/blob/main/%E6%9E%81%E7%AE%80%E7%A4%BA%E4%BE%8B01.png?raw=true)
+![极简比例计算器示例 1](https://github.com/fan200617120-ui/ComfyUI-ResolutionPresets/blob/main/%E6%9E%81%E7%AE%80%E7%A4%BA%E4%BE%8B01.png?raw=true)
 
-![极简比例计算器示例 2](https://github.com/fan200617120-ui/ComfyUI_Sizepresets/blob/main/%E6%9E%81%E7%AE%80%E7%A4%BA%E4%BE%8B02.png?raw=true)
+![极简比例计算器示例 2](https://github.com/fan200617120-ui/ComfyUI-ResolutionPresets/blob/main/%E6%9E%81%E7%AE%80%E7%A4%BA%E4%BE%8B02.png?raw=true)
 
 ### 🎯 智能比例缩放器
 **功能**：更高级的比例控制，支持保持当前比例、自定义限制等。
@@ -118,7 +118,7 @@
 ### 方法二：手动安装
 ```bash
 cd ComfyUI/custom_nodes
-git clone https://github.com/fan200617120-ui/ComfyUI_Sizepresets.git
+git clone https://github.com/fan200617120-ui/ComfyUI-ResolutionPresets
 ```
 
 ### 方法三：直接下载安装
@@ -182,7 +182,7 @@ git clone https://github.com/fan200617120-ui/ComfyUI_Sizepresets.git
 
 ## 📁 目录结构
 ```
-ComfyUI_Sizepresets/
+ComfyUI-ResolutionPresets/
 ├── __init__.py          # 插件初始化
 ├── nodes.py             # 所有节点定义
 ├── presets.py           # 分辨率预设配置
@@ -245,7 +245,7 @@ ComfyUI_Sizepresets/
 
 ## 📞 支持与反馈
 
-- **GitHub Issues**: [提交问题](https://github.com/fan200617120-ui/ComfyUI_Sizepresets/issues)
+- **GitHub Issues**: [提交问题](https://github.com/fan200617120-ui/ComfyUI-ResolutionPresets/issues)
 - **功能请求**: 欢迎提出新功能建议
 - **Bug报告**: 发现Bug请及时报告
 
@@ -256,6 +256,7 @@ ComfyUI_Sizepresets/
 如果这个插件对你有帮助，请给个 ⭐ Star！你的支持是我持续更新的动力！
 
 **Enjoy Creating! 🎨**
+
 
 
 
