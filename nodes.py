@@ -1,6 +1,6 @@
 """
 分辨率预设与工具节点 - 专业版
-文件夹名：ComfyUI_Sizepresets
+文件夹名：ComfyUI_ResolutionPresets
 节点显示名：专业分辨率节点
 """
 import torch
@@ -499,3 +499,4 @@ NODE_DISPLAY_NAME_MAPPINGS = {
     "SmartAspectScaler": "智能比例缩放器",
     "AspectRatioLock": "极简比例计算器",  # 新增显示名
 }
+
