@@ -107,45 +107,36 @@
 2. 点击"Manager" → "Install Custom Nodes"
 3. 搜索"ComfyUI_Sizepresets"
 4. 点击安装，重启ComfyUI
+注：如果那边能过审，则可以用方法一。
 
 ### 方法二：手动安装
 ```bash
 cd ComfyUI/custom_nodes
 git clone https://github.com/fan200617120-ui/ComfyUI_Sizepresets.git
+```
 
-方法三：直接下载安装
+### 方法三：直接下载安装
+1. 下载最新版本ZIP
+2. 解压到 `ComfyUI/custom_nodes/` 目录
+3. 重启ComfyUI
 
-    下载最新版本ZIP
+---
 
-    解压到 ComfyUI/custom_nodes/ 目录
+### 基础使用
+1. 在节点菜单中找到 **ResolutionPresets** 分类
+2. 添加 **分辨率预设器** 节点
+3. 选择模型和预设尺寸
+4. 连接输出到你的工作流
 
-    重启ComfyUI
+### 使用极简比例计算器
+1. 添加 **极简比例计算器** 节点
+2. 选择要锁定的比例（如9:16）
+3. 选择输入类型（宽度/高度）
+4. 输入目标值
+5. 连接输出到图像生成节点
 
-## 基础使用
-
-    在节点菜单中找到 ResolutionPresets 分类
-
-    添加 分辨率预设器 节点
-
-    选择模型和预设尺寸
-
-    连接输出到你的工作流
-
-###使用极简比例计算器
-
-    添加 极简比例计算器 节点
-
-    选择要锁定的比例（如9:16）
-
-    选择输入类型（宽度/高度）
-
-    输入目标值
-
-    连接输出到图像生成节点
-
-###工作流示例
-json
-
+### 工作流示例
+```json
 {
   "workflow": {
     "nodes": [
@@ -160,35 +151,31 @@ json
     ]
   }
 }
+```
 
-### 🔧 技术特性
+---
+
+## 🔧 技术特性
+
 ### 🚀 高性能处理
+- 优化的Tensor/PIL转换，内存效率高
+- 异步处理支持，提高工作流效率
+- 智能尺寸验证，防止错误输入
 
-    优化的Tensor/PIL转换，内存效率高
+### 🎨 专业设计
+- 模块化代码结构，易于维护扩展
+- 详细的日志输出，便于调试
+- 统一的错误处理机制
 
-    异步处理支持，提高工作流效率
+### ✅ 完全兼容
+- 兼容所有ComfyUI工作流
+- 支持ComfyUI-Manager一键更新
+- 与主流AI模型完全兼容
 
-    智能尺寸验证，防止错误输入
+---
 
-🎨 专业设计
-
-    模块化代码结构，易于维护扩展
-
-    详细的日志输出，便于调试
-
-    统一的错误处理机制
-
-✅ 完全兼容
-
-    兼容所有ComfyUI工作流
-
-    支持ComfyUI-Manager一键更新
-
-    与主流AI模型完全兼容
-
-📁 目录结构
-text
-
+## 📁 目录结构
+```
 ComfyUI_Sizepresets/
 ├── __init__.py          # 插件初始化
 ├── nodes.py             # 所有节点定义
@@ -200,68 +187,69 @@ ComfyUI_Sizepresets/
 └── examples/            # 示例工作流
     ├── basic_workflow.json
     └── advanced_workflow.json
+```
 
-🎯 使用技巧
-技巧1：批量处理保持比例
+---
 
-使用极简比例计算器锁定比例，然后批量处理不同尺寸的图像，确保所有输出保持统一比例。
-技巧2：智能尺寸优化
+## 🎯 使用技巧
 
-使用智能比例缩放器的限制功能，自动将大尺寸图像缩放到合理范围，避免显存溢出。
-技巧3：多平台适配
+### 技巧1：批量处理保持比例
+使用**极简比例计算器**锁定比例，然后批量处理不同尺寸的图像，确保所有输出保持统一比例。
 
+### 技巧2：智能尺寸优化
+使用**智能比例缩放器**的限制功能，自动将大尺寸图像缩放到合理范围，避免显存溢出。
+
+### 技巧3：多平台适配
 利用不同的预设比例，快速生成适合不同平台（Instagram、Twitter、YouTube等）的图片尺寸。
-🤝 贡献指南
+
+---
+
+## 🤝 贡献指南
 
 欢迎提交 Issue 和 Pull Request！
-贡献流程：
 
-    Fork 本仓库
+### 贡献流程：
+1. Fork 本仓库
+2. 创建功能分支 (`git checkout -b feature/AmazingFeature`)
+3. 提交更改 (`git commit -m 'Add some AmazingFeature'`)
+4. 推送到分支 (`git push origin feature/AmazingFeature`)
+5. 开启 Pull Request
 
-    创建功能分支 (git checkout -b feature/AmazingFeature)
+### 开发要求：
+- 遵循现有代码风格
+- 添加必要的注释
+- 更新相关文档
+- 确保向后兼容性
 
-    提交更改 (git commit -m 'Add some AmazingFeature')
+---
 
-    推送到分支 (git push origin feature/AmazingFeature)
+## 📄 许可证
 
-    开启 Pull Request
+本项目采用 MIT 许可证 - 查看 [LICENSE](LICENSE) 文件了解详情。
 
-开发要求：
-
-    遵循现有代码风格
-
-    添加必要的注释
-
-    更新相关文档
-
-    确保向后兼容性
-
-📄 许可证
-
-本项目采用 MIT 许可证 - 查看 LICENSE 文件了解详情。
-🙏 致谢
+## 🙏 致谢
 
 感谢所有贡献者和用户的支持！特别感谢：
 
-    ComfyUI社区 - 提供了优秀的平台
+- **ComfyUI社区** - 提供了优秀的平台
+- **所有AI模型开发者** - 创造了强大的工具
+- **插件测试人员** - 提供了宝贵的反馈
 
-    所有AI模型开发者 - 创造了强大的工具
+---
 
-    插件测试人员 - 提供了宝贵的反馈
+## 📞 支持与反馈
 
-📞 支持与反馈
+- **GitHub Issues**: [提交问题](https://github.com/fan200617120-ui/ComfyUI_Sizepresets/issues)
+- **功能请求**: 欢迎提出新功能建议
+- **Bug报告**: 发现Bug请及时报告
 
-    GitHub Issues: 提交问题
+---
 
-    功能请求: 欢迎提出新功能建议
-
-    Bug报告: 发现Bug请及时报告
-
-⭐ 支持项目
+## ⭐ 支持项目
 
 如果这个插件对你有帮助，请给个 ⭐ Star！你的支持是我持续更新的动力！
 
-Enjoy Creating! 🎨
+**Enjoy Creating! 🎨**
 
 
 
