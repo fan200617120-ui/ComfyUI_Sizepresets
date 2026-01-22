@@ -113,7 +113,7 @@
 2. 点击"Manager" → "Install Custom Nodes"
 3. 搜索"ComfyUI_Sizepresets"
 4. 点击安装，重启ComfyUI
-注：如果那边能过审，则可以用方法一。
+### 注：如果那边能过审，则可以用方法一。
 
 ### 方法二：手动安装
 ```bash
@@ -256,6 +256,7 @@ ComfyUI_Sizepresets/
 如果这个插件对你有帮助，请给个 ⭐ Star！你的支持是我持续更新的动力！
 
 **Enjoy Creating! 🎨**
+
 
 
 
